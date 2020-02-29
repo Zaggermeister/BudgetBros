@@ -1,4 +1,4 @@
-package com.gradwork2020.budgetbros;
+package com.bbdgradwork.budgetbros;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
