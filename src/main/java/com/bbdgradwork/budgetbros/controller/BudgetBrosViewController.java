@@ -15,7 +15,17 @@ public class BudgetBrosViewController {
     }
 
     @GetMapping("/")
-    public String landingPage() {
-        return "landingPage";
+    public String main() {
+        return "main";
+    }
+
+    @GetMapping("/signin")
+    public String login() {
+        return "signin";
+    }
+
+    @GetMapping("/register")
+    public String register() {
+        return "register";
     }
 }

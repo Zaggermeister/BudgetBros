@@ -1,0 +1,59 @@
+:root {
+  --color-primary: #4D72DE;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  background-color: white;
+  box-shadow: 0px 3px 10px 3px #eee;
+  padding: 14px
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-right {
+
+}
+
+.navbar-logo {
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+}
+
+.navbar-slogan {
+  text-transform: uppercase;
+  color: var(--color-primary);
+  font-weight: bold;
+  padding: 0 0 0 12px;
+}
+
+.navbar-logout {
+  color: var(--color-primary);
+  padding: 0 0 0 20px
+}
+
+.navbar-name {
+  color: var(--color-primary);
+}
+
+.testbox {
+  height: 100px;
+  width: 100px;
+  background-color: red;
+}
