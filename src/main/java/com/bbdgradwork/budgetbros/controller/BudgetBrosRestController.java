@@ -66,10 +66,4 @@ public class BudgetBrosRestController {
 
     }
 
-    @DeleteMapping("/user/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable("userId") String userId) {
-        repository.deleteById(userId);
-        return ResponseEntity.status(200).body("Deleted user with userId: " + userId);
-    }
-
 }
