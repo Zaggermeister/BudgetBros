@@ -1,30 +1,24 @@
 package com.bbdgradwork.budgetbros.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 //TODO Complete class
+@Data
+@Document("Expenses")
 public class Expense {
+
+    @Field("ExpenseId")
+    private String expenseId;
+
+    @Field("ExpenseName")
     private String expenseName;
+
+    @Field("ExpenseDescription")
     private String expenseDescription;
+
+    @Field("Category")
     private String category;
 
-    public Expense(@JsonProperty("name") String expenseName,
-                   @JsonProperty("description") String expenseDescription,
-                   @JsonProperty("category") String category) {
-        this.expenseName = expenseName;
-        this.expenseDescription = expenseDescription;
-        this.category = category;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public String getExpenseDescription() {
-        return expenseDescription;
-    }
-
-    public String getExpenseName() {
-        return expenseName;
-    }
 }
