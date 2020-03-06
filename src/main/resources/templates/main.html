@@ -12,8 +12,11 @@
 
   <nav class="navbar">
     <div class="navbar-left">
-      <img class="navbar-logo" src="assets/pig.png"/>
-      <span class="navbar-slogan">Budget Bros</span>
+      <img class="navbar-burger" src="assets/menu.png" id="menu-burger"/>
+      <div class="navbar-logo-container">
+        <img class="navbar-logo" src="assets/pig.png"/>
+        <span class="navbar-slogan">Budget Bros</span>
+      </div>
     </div>
     <div class="navbar-right">
       <span class="navbar-name">Hello, Bitzer</span>
@@ -21,11 +24,113 @@
     </div>
   </nav>
 
-  <aside>
-
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-overflow">
+      <div class="sidebar-logo-container">
+        <img class="sidebar-logo" src="assets/pig-white.png"/>
+        <span class="sidebar-slogan">Budget Bros</span>
+      </div>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-interface-heading"><p>Menu</p></div>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-button-container">
+        <div class="sidebar-button-left-container">
+          <img class="sidebar-button-icon" src="assets/dashboard.png"/>
+          <p class="sidebar-button-heading">Dashboard</p>
+        </div>
+        <img class="sidebar-button-chev" src="assets/chevron-right.png"/>
+      </div>
+      <div class="sidebar-button-container">
+        <div class="sidebar-button-left-container">
+          <img class="sidebar-button-icon" src="assets/plus.png"/>
+          <p class="sidebar-button-heading">Add Budget</p>
+        </div>
+        <img class="sidebar-button-chev" src="assets/chevron-right.png"/>
+      </div>
+      <div class="sidebar-button-container">
+        <div class="sidebar-button-left-container">
+          <img class="sidebar-button-icon" src="assets/plus.png"/>
+          <p class="sidebar-button-heading">Add Expenses</p>
+        </div>
+        <img class="sidebar-button-chev" src="assets/chevron-right.png"/>
+      </div>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-close-button-container" id="sidebar-close-button">
+        <img class="sidebar-close-button" src="assets/chevron-left.png"/>
+      </div>
+    </div>
   </aside>
 
   <div class="inner-body">
+    <div class="inner-inner-body">
+
+      <div class="add-budget-body">
+        <form class="add-budget-form" id="add-budget-form">
+          <p class="add-budget-form-main-heading">Create a budget</p>
+          <p class="add-budget-form-heading">Add income</p>
+          <div class="add-budget-form-wrap-container">
+            <div class="add-budget-form-input-block add-budget-form-input-block-left">
+              <label class="add-budget-form-input-heading" for="add-budget-input-salary">Salary</label>
+              <input class="add-budget-form-input" placeholder="Salary" type="number" id="add-budget-input-salary">
+            </div>
+            <div class="add-budget-form-input-block add-budget-form-input-block-right">
+              <label class="add-budget-form-input-heading" for="add-budget-input-other-inc">Other</label>
+              <input class="add-budget-form-input" placeholder="Other" type="number" id="add-budget-input-other-inc">
+            </div>
+          </div>
+          <p class="add-budget-form-heading">Add expenses</p>
+          <div class="add-budget-form-wrap-container">
+            <div class="add-budget-form-input-block add-budget-form-input-block-left">
+              <label class="add-budget-form-input-heading" for="add-budget-input-personal">Personal</label>
+              <input class="add-budget-form-input" placeholder="Personal" type="number" id="add-budget-input-personal">
+            </div>
+            <div class="add-budget-form-input-block add-budget-form-input-block-right">
+              <label class="add-budget-form-input-heading" for="add-budget-input-household">Household</label>
+              <input class="add-budget-form-input" placeholder="Household" type="number" id="add-budget-input-household">
+            </div>
+          </div>
+          <div class="add-budget-form-wrap-container">
+            <div class="add-budget-form-input-block add-budget-form-input-block-left">
+              <label class="add-budget-form-input-heading" for="add-budget-input-debt">Debt</label>
+              <input class="add-budget-form-input" placeholder="Debt" type="number" id="add-budget-input-debt">
+            </div>
+            <div class="add-budget-form-input-block add-budget-form-input-block-right">
+              <label class="add-budget-form-input-heading" for="add-budget-input-other-exp">Other</label>
+              <input class="add-budget-form-input" placeholder="Other" type="number" id="add-budget-input-other-exp">
+            </div>
+          </div>
+          <div class="add-budget-form-wrap-container">
+            <div class="add-budget-form-input-block add-budget-form-input-block-left">
+              <label class="add-budget-form-input-heading" for="add-budget-input-savings">Savings</label>
+              <input class="add-budget-form-input" placeholder="Savings" type="number" id="add-budget-input-savings">
+            </div>
+            <div class="add-budget-form-input-block add-budget-form-input-block-right">
+              <label class="add-budget-form-input-heading" for="add-budget-input-wants">Wants</label>
+              <input class="add-budget-form-input" placeholder="Wants" type="number" id="add-budget-input-wants">
+            </div>
+          </div>
+          <p class="add-budget-form-heading">Choose a goal (Needs / Wants / Savings)</p>
+          <div class="add-budget-form-radio-flex-container">
+            <div class="add-budget-form-radio-container">
+              <input class="add-budget-form-input-radio" type="radio" id="add-budget-input-radio-1" name="goal" value="1" checked="checked">
+              <label class="add-budget-form-input-heading-radio" for="add-budget-input-radio-1">50 / 30 / 20</label>
+            </div>
+            <div class="add-budget-form-radio-container">
+              <input class="add-budget-form-input-radio" type="radio" id="add-budget-input-radio-2"name="goal" value="2">
+              <label class="add-budget-form-input-heading-radio" for="add-budget-input-radio-2">40 / 40 / 20</label>
+            </div>
+            <div class="add-budget-form-radio-container">
+              <input class="add-budget-form-input-radio" type="radio" id="add-budget-input-radio-3"name="goal" value="3">
+              <label class="add-budget-form-input-heading-radio" for="add-budget-input-radio-3">40 / 30 / 30</label>
+            </div>
+          </div>
+          <div class="create-budget-button-container">
+            <button class="create-budget-button" type="submit">Create budget</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
   </div>
 
 </body>
