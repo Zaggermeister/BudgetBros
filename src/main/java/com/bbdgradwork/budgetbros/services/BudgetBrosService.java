@@ -2,34 +2,42 @@ package com.bbdgradwork.budgetbros.services;
 
 import com.bbdgradwork.budgetbros.model.Expense;
 import com.bbdgradwork.budgetbros.model.User;
-import com.bbdgradwork.budgetbros.repository.Repository;
+import com.bbdgradwork.budgetbros.repository.ExpenseRepository;
+import com.bbdgradwork.budgetbros.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BudgetBrosService {
 
     @Autowired
-    Repository repository;
+    UserRepository userRepository;
+
+    @Autowired
+    ExpenseRepository expenseRepository;
 
     public BudgetBrosService() {
 
     }
 
-    //TODO Complete function
+
     public boolean addExpense(Expense expense) {
-        if(expense.getCategory().equals("category1")) {
+        try {
+            expenseRepository.save(expense);
             return true;
+        }catch (Exception e) {
+            return false;
         }
-        return false;
     }
 
     public boolean addUser(User user) {
         try {
-            repository.save(user);
+            userRepository.save(user);
             return true;
         }catch (Exception e) {
             return false;
@@ -37,7 +45,7 @@ public class BudgetBrosService {
     }
 
     public Optional<User> getUser(String userId) {
-        return repository.findById(userId);
+        return userRepository.findById(userId);
     }
 
 
