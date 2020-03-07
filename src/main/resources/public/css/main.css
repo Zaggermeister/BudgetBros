@@ -2,6 +2,7 @@
   --color-primary: #4D72DE;
   --color-form-heading: rgb(135, 138, 143);
   --color-lighter-grey: rgb(170, 170, 170);
+  --color-background: rgb(245, 245, 245);
 }
 
 * {
@@ -11,7 +12,14 @@
   font-family: 'Roboto', sans-serif;
 }
 
-input {
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: white;
+}
+
+input, select {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid var(--color-form-heading);
@@ -44,7 +52,7 @@ label {
   align-items: center;
   position: relative;
   z-index: 0;
-  background-color: rgb(245, 245, 245);
+  background-color: var(--color-background);
 }
 
 .inner-body {
@@ -59,8 +67,38 @@ label {
   min-height: calc(100vh - 68px);
 }
 
+.page-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+}
+
 .hidden {
-  display: none;
+  display: none !important;
+}
+
+.spinner-container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.spinner::before {
+  content: "";
+  height: 160px;
+  width: 160px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -80px 0 0 -80px;
+  border-radius: 50%;
+  border: 10px solid var(--color-background);
+  border-top-color: var(--color-primary);
+  animation: spinner 0.7s ease infinite;
 }
 
 .navbar {
@@ -172,7 +210,7 @@ label {
 }
 
 .sidebar-spacer {
-  background-color: white;
+  background-color: rgb(126, 150, 223);
   height: 1px;
   width: 100%;
 }
@@ -217,59 +255,94 @@ label {
   width: 18px;
 }
 
-.add-budget-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  height: 100%;
+.card-container {
   width: 100%;
-  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0 0 20px 0;
 }
 
-.add-budget-form {
-  width: 700px;
+.card {
+  position: relative;
+  flex: 1;
+  min-width: 300px;
   padding: 40px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0px 3px 10px 3px #eee;
 }
 
-.add-budget-form-main-heading {
+.card-left {
+  margin: 0 10px 0 0;
+}
+
+.card-right {
+  margin: 0 0 0 10px;
+}
+
+.card-heading {
   color: var(--color-form-heading);
   text-align: center;
   padding: 0 0 20px 0;
   font-size: 22px;
 }
 
-.add-budget-form-heading {
+.form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 700px;
+  min-height: 734px;
+  padding: 40px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 3px 10px 3px #eee;
+}
+
+.form-main-heading {
+  color: var(--color-form-heading);
+  text-align: center;
+  padding: 0 0 20px 0;
+  font-size: 22px;
+}
+
+.form-heading {
   font-size: 18px;
   color: var(--color-form-heading);
   padding: 20px 0 10px 0;
 }
 
-.add-budget-form-wrap-container {
+.form-wrap-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 }
 
-.add-budget-form-input-block {
+.form-input-block {
   flex: 1;
   padding: 0 0 20px 0;
   min-width: 300px;
 }
 
-.add-budget-form-input-block-left {
+.form-input-block-left {
   padding-right: 10px;
 }
 
-.add-budget-form-input-block-right {
+.form-input-block-right {
   padding-left: 10px;
 }
 
-.add-budget-form-input-heading {
+.form-input-heading {
   color: var(--color-form-heading);
+}
+
+.form-input {
+
+}
+
+.form-spacer {
+  flex: 1;
 }
 
 .add-budget-form-input {
@@ -296,13 +369,13 @@ label {
 
 }
 
-.create-budget-button-container {
+.form-button-container {
   display: flex;
   justify-content: flex-end;
   padding: 20px 0 0 0;
 }
 
-.create-budget-button {
+.form-button {
   color: white;
   background-color: var(--color-primary);
   padding: 20px 40px;
@@ -313,23 +386,45 @@ label {
   box-shadow: 0px 3px 10px 3px #eee;
 }
 
+table {
+  width: 100%;
+}
+
+.col-4 {
+  width: 40px;
+}
+
+tr {
+  border: 1px solid black;
+}
+
+th {
+  text-align: left;
+}
+
 @media (max-width: 750px) {
-  .add-budget-form {
+  .form {
     width: 500px;
   }
-  .add-budget-form-input-block-left {
+  .form-input-block-left {
     padding-right: 0px;
   }
-  .add-budget-form-input-block-right {
+  .form-input-block-right {
     padding-left: 0px;
   }
 }
 
 @media (max-width: 550px) {
-  .add-budget-form {
+  .form {
     width: 360px;
   }
-  .add-budget-form-input-block {
+  .form-input-block {
     min-width: 200px;
+  }
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
   }
 }
