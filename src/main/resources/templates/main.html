@@ -6,6 +6,7 @@
   <title>Budget Bros</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="css/main.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
   <script defer type="text/javascript" src="js/main.js"></script>
 </head>
 <body class="body">
@@ -151,7 +152,7 @@
                 required>
             </div>
           </div>
-          <div class="form-wrap-container">
+          <!-- <div class="form-wrap-container">
             <div class="form-input-block form-input-block-left">
               <label class="form-input-heading" for="add-budget-input-savings">Savings</label>
               <input
@@ -176,7 +177,7 @@
                 max="1000000000"
                 required>
             </div>
-          </div>
+          </div> -->
           <p class="form-heading">Choose a goal (Needs / Wants / Savings)</p>
           <div class="add-budget-form-radio-flex-container">
             <div class="add-budget-form-radio-container">
@@ -192,6 +193,7 @@
               <label class="add-budget-form-input-heading-radio" for="add-budget-input-radio-3">40 / 30 / 30</label>
             </div>
           </div>
+          <div class="form-spacer"></div>
           <div class="form-button-container">
             <button class="form-button" type="submit">Create budget</button>
           </div>
@@ -225,8 +227,6 @@
                   <option>Household</option>
                   <option>Debt</option>
                   <option>Other</option>
-                  <option>Savings</option>
-                  <option>Wants</option>
               </select>
             </div>
             <div class="form-input-block form-input-block-right">
@@ -251,32 +251,26 @@
 
       <div class="page-body hidden" id="page-dashboard">
         <div class="card-container">
-          <div class="card card-left"></div>
-          <div class="card card-right"></div>
+          <div class="card card-left">
+            <p class="card-heading">Total expenses</p>
+            <canvas class="chart" id="chart-1"></canvas>
+          </div>
+          <div class="card card-right">
+            <p class="card-heading">Budgeted income left</p>
+            <canvas class="chart" id="chart-2"></canvas>
+          </div>
         </div>
         <div class="card-container">
           <div class="card">
-            <p class="card-heading">Expenses</p>
-            <table>
+            <p class="card-heading" id="expense-table-heading">No detailed expenses</p>
+            <table class="hidden" id="expense-table">
               <thead>
                 <th>Name</th>
                 <th>Type</th>
                 <th>Value</th>
                 <th>Delete</th>
               </thead>
-              <tbody>
-                <tr>
-                  <td data-label="Name">Shoes</td>
-                  <td data-label="Type">Personal</td>
-                  <td data-label="Value">100</td>
-                  <td data-label="Delete"><img src="assets/bin.png"/></td>
-                </tr>
-                <tr>
-                  <td data-label="Name">Kentucky</td>
-                  <td data-label="Type">Household</td>
-                  <td data-label="Value">250</td>
-                  <td data-label="Delete"><img src="assets/bin.png"/></td>
-                </tr>
+              <tbody id="table-body">
               </tbody>
             </table>
           </div>

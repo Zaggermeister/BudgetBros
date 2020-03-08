@@ -275,10 +275,12 @@ label {
 }
 
 .card-left {
+  padding: 20px;
   margin: 0 10px 0 0;
 }
 
 .card-right {
+  padding: 20px;
   margin: 0 0 0 10px;
 }
 
@@ -422,6 +424,11 @@ td img {
   box-sizing: content-box;
   padding: 10px 0;
   cursor: pointer;
+}
+
+.chart {
+  height: 100%;
+  width: 100%;
 }
 
 @media (max-width: 750px) {
