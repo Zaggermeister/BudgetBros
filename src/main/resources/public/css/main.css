@@ -111,6 +111,7 @@ label {
   background-color: white;
   box-shadow: 0px 3px 10px 3px #eee;
   padding: 14px 20px;
+  z-index: 1;
 }
 
 .navbar-left {
@@ -274,10 +275,12 @@ label {
 }
 
 .card-left {
+  padding: 20px;
   margin: 0 10px 0 0;
 }
 
 .card-right {
+  padding: 20px;
   margin: 0 0 0 10px;
 }
 
@@ -388,18 +391,44 @@ label {
 
 table {
   width: 100%;
-}
-
-.col-4 {
-  width: 40px;
-}
-
-tr {
-  border: 1px solid black;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 th {
-  text-align: left;
+  text-align: center;
+  padding: 10px 0;
+  color: white;
+  background-color: var(--color-primary);
+  font-size: 18px;
+  font-weight: initial;
+}
+
+tr {
+  color: var(--color-form-heading);
+}
+
+tr:nth-child(even) {
+  background-color: #eee;
+}
+
+td {
+  text-align: center;
+  padding: 10px 10px;
+}
+
+td img {
+  height: 30px;
+  width: 30px;
+  box-sizing: content-box;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.chart {
+  height: 100%;
+  width: 100%;
 }
 
 @media (max-width: 750px) {
@@ -411,6 +440,45 @@ th {
   }
   .form-input-block-right {
     padding-left: 0px;
+  }
+}
+
+@media (max-width: 660px) {
+  .card-left {
+    min-width: 400px;
+    margin: 0 0 20px 0;
+  }
+  .card-right {
+    min-width: 400px;
+    margin: 0;
+  }
+  thead {
+    display: none;
+  }
+  table, tbody, tr, td {
+    display: block;
+    width: 100%;
+  }
+  tr {
+    border-bottom: 3px solid #ddd;
+  }
+  tr:last-child {
+    border-bottom: none;
+  }
+  td {
+    position: relative;
+    padding: 16px;
+    text-align: right;
+  }
+  td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    margin: 0 0 0 16px;
+    font-weight: bold;
+  }
+  td img {
+    padding: 0;
   }
 }
 
