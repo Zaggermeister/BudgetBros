@@ -12,8 +12,11 @@
 
   <nav class="navbar">
     <div class="navbar-left">
-      <img class="navbar-logo" src="assets/pig.png"/>
-      <span class="navbar-slogan">Budget Bros</span>
+      <img class="navbar-burger" src="assets/menu.png" id="menu-burger"/>
+      <div class="navbar-logo-container">
+        <img class="navbar-logo" src="assets/pig.png"/>
+        <span class="navbar-slogan">Budget Bros</span>
+      </div>
     </div>
     <div class="navbar-right">
       <span class="navbar-name">Hello, Bitzer</span>
@@ -21,11 +24,266 @@
     </div>
   </nav>
 
-  <aside>
-
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-overflow">
+      <div class="sidebar-logo-container">
+        <img class="sidebar-logo" src="assets/pig-white.png"/>
+        <span class="sidebar-slogan">Budget Bros</span>
+      </div>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-interface-heading"><p>Menu</p></div>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-button-container" id="sidebar-dashboard">
+        <div class="sidebar-button-left-container">
+          <img class="sidebar-button-icon" src="assets/dashboard.png"/>
+          <p class="sidebar-button-heading">Dashboard</p>
+        </div>
+        <img class="sidebar-button-chev" src="assets/chevron-right.png"/>
+      </div>
+      <div class="sidebar-button-container" id="sidebar-add-budget">
+        <div class="sidebar-button-left-container">
+          <img class="sidebar-button-icon" src="assets/plus.png"/>
+          <p class="sidebar-button-heading">Add Budget</p>
+        </div>
+        <img class="sidebar-button-chev" src="assets/chevron-right.png"/>
+      </div>
+      <div class="sidebar-button-container" id="sidebar-add-expenses">
+        <div class="sidebar-button-left-container">
+          <img class="sidebar-button-icon" src="assets/plus.png"/>
+          <p class="sidebar-button-heading">Add Expenses</p>
+        </div>
+        <img class="sidebar-button-chev" src="assets/chevron-right.png"/>
+      </div>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-close-button-container" id="sidebar-close-button">
+        <img class="sidebar-close-button" src="assets/chevron-left.png"/>
+      </div>
+    </div>
   </aside>
 
   <div class="inner-body">
+    <div class="inner-inner-body">
+
+      <div class="spinner-container hidden" id="page-spinner">
+        <div class="spinner"></div>
+      </div>
+
+      <div class="page-body hidden" id="page-add-budget">
+        <form class="form" id="add-budget-form">
+          <p class="form-main-heading">Create a budget</p>
+          <p class="form-heading">Add income</p>
+          <div class="form-wrap-container">
+            <div class="form-input-block form-input-block-left">
+              <label class="form-input-heading" for="add-budget-input-salary">Salary</label>
+              <input
+                class="form-input add-budget-form-input"
+                placeholder="Salary"
+                type="number"
+                step="0.01"
+                id="add-budget-input-salary"
+                min="1"
+                max="1000000000"
+                required>
+            </div>
+            <div class="form-input-block form-input-block-right">
+              <label class="form-input-heading" for="add-budget-input-other-inc">Other</label>
+              <input
+                class="form-input add-budget-form-input"
+                placeholder="Other"
+                type="number"
+                step="0.01"
+                id="add-budget-input-otherInc"
+                min="0"
+                max="1000000000"
+                required>
+            </div>
+          </div>
+          <p class="form-heading">Add expenses</p>
+          <div class="form-wrap-container">
+            <div class="form-input-block form-input-block-left">
+              <label class="form-input-heading" for="add-budget-input-personal">Personal</label>
+              <input
+              class="form-input add-budget-form-input"
+              placeholder="Personal"
+              type="number"
+              step="0.01"
+              id="add-budget-input-personal"
+              min="0"
+              max="1000000000"
+              required>
+            </div>
+            <div class="form-input-block form-input-block-right">
+              <label class="form-input-heading" for="add-budget-input-household">Household</label>
+              <input
+                class="form-input add-budget-form-input"
+                placeholder="Household"
+                type="number"
+                step="0.01"
+                id="add-budget-input-household"
+                min="0"
+                max="1000000000"
+                required>
+            </div>
+          </div>
+          <div class="form-wrap-container">
+            <div class="form-input-block form-input-block-left">
+              <label class="form-input-heading" for="add-budget-input-debt">Debt</label>
+              <input
+                class="form-input add-budget-form-input"
+                placeholder="Debt"
+                type="number"
+                step="0.01"
+                id="add-budget-input-debt"
+                min="0"
+                max="1000000000"
+                required>
+            </div>
+            <div class="form-input-block form-input-block-right">
+              <label class="form-input-heading" for="add-budget-input-other-exp">Other</label>
+              <input
+                class="form-input add-budget-form-input"
+                placeholder="Other"
+                type="number"
+                step="0.01"
+                id="add-budget-input-otherExp"
+                min="0"
+                max="1000000000"
+                required>
+            </div>
+          </div>
+          <div class="form-wrap-container">
+            <div class="form-input-block form-input-block-left">
+              <label class="form-input-heading" for="add-budget-input-savings">Savings</label>
+              <input
+                class="form-input add-budget-form-input"
+                placeholder="Savings"
+                type="number"
+                step="0.01"
+                id="add-budget-input-savings"
+                min="0"
+                max="1000000000"
+                required>
+            </div>
+            <div class="form-input-block form-input-block-right">
+              <label class="form-input-heading" for="add-budget-input-wants">Wants</label>
+              <input
+                class="form-input add-budget-form-input"
+                placeholder="Wants"
+                type="number"
+                step="0.01"
+                id="add-budget-input-wants"
+                min="0"
+                max="1000000000"
+                required>
+            </div>
+          </div>
+          <p class="form-heading">Choose a goal (Needs / Wants / Savings)</p>
+          <div class="add-budget-form-radio-flex-container">
+            <div class="add-budget-form-radio-container">
+              <input class="add-budget-form-input-radio" type="radio" id="add-budget-input-radio-1" name="goal" value="1" checked="checked">
+              <label class="add-budget-form-input-heading-radio" for="add-budget-input-radio-1">50 / 30 / 20</label>
+            </div>
+            <div class="add-budget-form-radio-container">
+              <input class="add-budget-form-input-radio" type="radio" id="add-budget-input-radio-2" name="goal" value="2">
+              <label class="add-budget-form-input-heading-radio" for="add-budget-input-radio-2">40 / 40 / 20</label>
+            </div>
+            <div class="add-budget-form-radio-container">
+              <input class="add-budget-form-input-radio" type="radio" id="add-budget-input-radio-3" name="goal" value="3">
+              <label class="add-budget-form-input-heading-radio" for="add-budget-input-radio-3">40 / 30 / 30</label>
+            </div>
+          </div>
+          <div class="form-button-container">
+            <button class="form-button" type="submit">Create budget</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="page-body hidden" id="page-add-expenses">
+        <form class="form" id="add-expenses-form">
+          <p class="form-main-heading">Add expenses</p>
+          <div class="form-wrap-container">
+            <div class="form-input-block">
+              <label class="form-input-heading" for="add-expense-name">Expense name</label>
+              <input
+                class="form-input add-expense-form-input"
+                placeholder="Expense name"
+                type="text"
+                id="add-expense-name"
+                pattern="^\w+$"
+                title="No special characters"
+                required>
+            </div>
+          </div>
+          <div class="form-wrap-container">
+            <div class="form-input-block form-input-block-left">
+              <label class="form-input-heading" for="add-expense-type">Type</label>
+              <select
+                class="form-input add-expense-form-input"
+                id="add-expense-type"
+                required>
+                  <option>Personal</option>
+                  <option>Household</option>
+                  <option>Debt</option>
+                  <option>Other</option>
+                  <option>Savings</option>
+                  <option>Wants</option>
+              </select>
+            </div>
+            <div class="form-input-block form-input-block-right">
+              <label class="form-input-heading" for="add-expense-value">Value</label>
+              <input
+                class="form-input add-expense-form-input"
+                placeholder="Value"
+                type="number"
+                step="0.01"
+                id="add-expense-value"
+                min="1"
+                max="1000000000"
+                required>
+            </div>
+          </div>
+          <div class="form-spacer"></div>
+          <div class="form-button-container">
+            <button class="form-button" type="submit">Add expense</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="page-body hidden" id="page-dashboard">
+        <div class="card-container">
+          <div class="card card-left"></div>
+          <div class="card card-right"></div>
+        </div>
+        <div class="card-container">
+          <div class="card">
+            <p class="card-heading">Expenses</p>
+            <!-- <table>
+              <colgroup>
+                <col/>
+                <col/>
+                <col/>
+                <col class="col-4"/>
+              </colgroup>
+              <tbody>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Value</th>
+                  <th>Delete</th>
+                </tr>
+                <tr>
+                  <td>Kentucky</td>
+                  <td>Household</td>
+                  <td>250</td>
+                  <td>trashcan</td>
+                </tr>
+              </tbody>
+            </table> -->
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
 </body>
