@@ -48,13 +48,13 @@
         </div>
         <img class="sidebar-button-chev" src="assets/chevron-right.png"/>
       </div>
-      <div class="sidebar-button-container" id="sidebar-add-expenses">
+      <!-- <div class="sidebar-button-container" id="sidebar-add-expenses">
         <div class="sidebar-button-left-container">
           <img class="sidebar-button-icon" src="assets/plus.png"/>
           <p class="sidebar-button-heading">Add Expenses</p>
         </div>
         <img class="sidebar-button-chev" src="assets/chevron-right.png"/>
-      </div>
+      </div> -->
       <div class="sidebar-spacer"></div>
       <div class="sidebar-close-button-container" id="sidebar-close-button">
         <img class="sidebar-close-button" src="assets/chevron-left.png"/>
@@ -200,54 +200,8 @@
         </form>
       </div>
 
-      <div class="page-body hidden" id="page-add-expenses">
-        <form class="form" id="add-expenses-form">
-          <p class="form-main-heading">Add expenses</p>
-          <div class="form-wrap-container">
-            <div class="form-input-block">
-              <label class="form-input-heading" for="add-expense-name">Expense name</label>
-              <input
-                class="form-input add-expense-form-input"
-                placeholder="Expense name"
-                type="text"
-                id="add-expense-name"
-                pattern="^\w+$"
-                title="No special characters"
-                required>
-            </div>
-          </div>
-          <div class="form-wrap-container">
-            <div class="form-input-block form-input-block-left">
-              <label class="form-input-heading" for="add-expense-type">Type</label>
-              <select
-                class="form-input add-expense-form-input"
-                id="add-expense-type"
-                required>
-                  <option>Personal</option>
-                  <option>Household</option>
-                  <option>Debt</option>
-                  <option>Other</option>
-              </select>
-            </div>
-            <div class="form-input-block form-input-block-right">
-              <label class="form-input-heading" for="add-expense-value">Value</label>
-              <input
-                class="form-input add-expense-form-input"
-                placeholder="Value"
-                type="number"
-                step="0.01"
-                id="add-expense-value"
-                min="1"
-                max="1000000000"
-                required>
-            </div>
-          </div>
-          <div class="form-spacer"></div>
-          <div class="form-button-container">
-            <button class="form-button" type="submit">Add expense</button>
-          </div>
-        </form>
-      </div>
+      <!-- <div class="page-body hidden" id="page-add-expenses">
+      </div> -->
 
       <div class="page-body hidden" id="page-dashboard">
         <div class="card-container">
@@ -259,6 +213,54 @@
             <p class="card-heading">Budgeted income left</p>
             <canvas class="chart" id="chart-2"></canvas>
           </div>
+        </div>
+        <div class="card-container">
+          <form class="card" id="add-expenses-form">
+            <p class="form-main-heading">Add expenses</p>
+            <div class="form-wrap-container">
+              <div class="form-input-block">
+                <label class="form-input-heading" for="add-expense-name">Expense name</label>
+                <input
+                  class="form-input add-expense-form-input"
+                  placeholder="Expense name"
+                  type="text"
+                  id="add-expense-name"
+                  pattern="^\w+$"
+                  title="No special characters"
+                  required>
+              </div>
+            </div>
+            <div class="form-wrap-container">
+              <div class="form-input-block form-input-block-left">
+                <label class="form-input-heading" for="add-expense-type">Type</label>
+                <select
+                  class="form-input add-expense-form-input"
+                  id="add-expense-type"
+                  required>
+                    <option>Personal</option>
+                    <option>Household</option>
+                    <option>Debt</option>
+                    <option>Other</option>
+                </select>
+              </div>
+              <div class="form-input-block form-input-block-right">
+                <label class="form-input-heading" for="add-expense-value">Value</label>
+                <input
+                  class="form-input add-expense-form-input"
+                  placeholder="Value"
+                  type="number"
+                  step="0.01"
+                  id="add-expense-value"
+                  min="1"
+                  max="1000000000"
+                  required>
+              </div>
+            </div>
+            <div class="form-spacer"></div>
+            <div class="form-button-container">
+              <button class="form-button" type="submit">Add expense</button>
+            </div>
+          </form>
         </div>
         <div class="card-container">
           <div class="card">

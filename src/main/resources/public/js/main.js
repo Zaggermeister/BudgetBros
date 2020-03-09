@@ -57,7 +57,7 @@ const expensesMock = [
 const pageIds = [
   'page-spinner',
   'page-add-budget',
-  'page-add-expenses',
+  // 'page-add-expenses',
   'page-dashboard',
 ];
 
@@ -370,10 +370,10 @@ sidebarAddBudgetButton.addEventListener('click', () => {
   sidebar.classList.remove('sidebar-show');
 });
 
-sidebarAddExpensesButton.addEventListener('click', () => {
-  setPageToShow('page-add-expenses');
-  sidebar.classList.remove('sidebar-show');
-});
+// sidebarAddExpensesButton.addEventListener('click', () => {
+//   setPageToShow('page-add-expenses');
+//   sidebar.classList.remove('sidebar-show');
+// });
 
 addBudgetForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -423,9 +423,8 @@ addExpenseForm.addEventListener('submit', (e) => {
 
   // TODO: Don't call addExpense here, push to an array, when you switch to the dashboard (onclick), then call it on the array.
   addExpense(data, expenseTableBody);
-  setTimeout(() => addExpenseToPieChart(data), 5000);
-  setTimeout(() => addExpenseToBarChart(data), 5000);
-  console.log(state.expenses);
+  addExpenseToPieChart(data);
+  addExpenseToBarChart(data);
 });
 
 // Startup logic
