@@ -6,6 +6,16 @@ $(()=>{
         let email=$("#userEmail").val();
         let password=$("#userPassword").val();
         let passcheck=$("#userPass2").val();
+        let endpoint = window.location.protocol + '//' + window.location.hostname + (window.location.port ? `:${window.location.port}`: '') +  '/api/v1/user';
+
+    $.ajax({
+        method: "POST",
+        url: endpoint,
+        contentType: 'application/json',
+        data: JSON.stringify({ name: username, surname: surname, email: email })
+    }).done(function ( msg )  {
+        alert( "You have been registered!");
+    });
         console.log(createUserObj(username,surname,email,password));
 
 
