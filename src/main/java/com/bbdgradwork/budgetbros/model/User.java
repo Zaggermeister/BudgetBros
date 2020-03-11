@@ -13,6 +13,9 @@ public class User {
     @Id
     private String userId;
 
+    @Field("Password")
+    private String password;
+
     @Field("Name")
     private String name;
 
