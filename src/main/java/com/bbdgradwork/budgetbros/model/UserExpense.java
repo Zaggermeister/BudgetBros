@@ -1,7 +1,5 @@
 package com.bbdgradwork.budgetbros.model;
 
-//TODO fix class
-
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,14 +18,8 @@ public class UserExpense {
     @Field("ExpenseId")
     private String expenseId;
 
-    @Field("ExpenseBudget")
-    private String expenseBudget;
-
     @Field("AmountSpent")
     private String amountSpent;
-
-    @Field("OverBudget")
-    private String overBudget;
 
     @Field("Month")
     private String month;
