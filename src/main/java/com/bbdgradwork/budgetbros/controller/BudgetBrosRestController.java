@@ -141,8 +141,9 @@ public class BudgetBrosRestController {
     // Post a new budget
     @PostMapping("/budget")
     public ResponseEntity<String> addBudget(@RequestBody Budget budget) {
+        budget.setBudgetSavingsAmount(budgetBrosService.calculateSavings(budget));
         budgetRepository.save(budget);
-        return ResponseEntity.status(200).body("Success");
+        return ResponseEntity.status(200).body(budget.getBudgetSavingsAmount());
     }
 
     // Get all the budgets
@@ -165,11 +166,20 @@ public class BudgetBrosRestController {
     }
 
 
-    //Get expenses for user
+    // Get expenses for user
     @GetMapping("/expenses/{userId}")
     public ResponseEntity<List<Expense>> getExpenseByUser(@PathVariable("userId") String userId) {
         return ResponseEntity.status(200).body(expenseRepository.findByUserId(userId));
     }
 
+
+    // Get
+    @GetMapping("/totalExpensesPerCategory/{userId}")
+    public ResponseEntity<TotalExpensePerCategory> getTotalExpensesPerCategory(@PathVariable("userId") String userId) {
+        List<Expense> expenses = expenseRepository.findByUserId(userId);
+        TotalExpensePerCategory totalExpensePerCategory = budgetBrosService.getTotalExpense(expenses);
+
+        return ResponseEntity.status(200).body(totalExpensePerCategory);
+    }
 
 }
