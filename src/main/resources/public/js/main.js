@@ -335,6 +335,7 @@ addBudgetForm.addEventListener('submit', (e) => {
   .then(() => {
     setPageToShow('page-dashboard');
     sidebarDashboardButton.classList.remove('hidden');
+    sidebarAddBudgetButton.classList.add('hidden');
     getExpenses();
     getExpensesPerCategory();
     getBudgetLeftPerCategory();
