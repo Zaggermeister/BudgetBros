@@ -1,22 +1,25 @@
 package com.bbdgradwork.budgetbros.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-//TODO Complete class
 @Data
 @Document("Expenses")
 public class Expense {
 
-    @Field("ExpenseId")
+    @Id
     private String expenseId;
+
+    @Field("UserId")
+    private String userId;
 
     @Field("ExpenseName")
     private String expenseName;
 
-    @Field("ExpenseDescription")
-    private String expenseDescription;
+    @Field("Amount")
+    private String amount;
 
     @Field("Category")
     private String category;
