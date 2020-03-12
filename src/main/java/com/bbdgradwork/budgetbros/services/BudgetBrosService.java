@@ -2,6 +2,8 @@ package com.bbdgradwork.budgetbros.services;
 
 import com.bbdgradwork.budgetbros.model.Expense;
 import com.bbdgradwork.budgetbros.model.User;
+import com.bbdgradwork.budgetbros.model.Budget;
+import com.bbdgradwork.budgetbros.repository.BudgetRepository;
 import com.bbdgradwork.budgetbros.repository.ExpenseRepository;
 import com.bbdgradwork.budgetbros.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class BudgetBrosService {
 
     @Autowired
     ExpenseRepository expenseRepository;
+
+    @Autowired
+    BudgetRepository budgetRepository;
 
     public BudgetBrosService() {
 
@@ -46,6 +51,17 @@ public class BudgetBrosService {
 
     public Optional<User> getUser(String userId) {
         return userRepository.findById(userId);
+    }
+
+    public boolean addBudget(Budget budget)
+    {
+        try{
+            budgetRepository.save(budget);
+            return true;
+        }catch (Exception e){
+            return false;
+
+        }
     }
 
 

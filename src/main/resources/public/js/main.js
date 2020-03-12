@@ -2,6 +2,7 @@ const state = {
   addBudgetData: {
     income: {},
     expenses: {},
+    budget:{},
     goal: undefined,
   },
   userInfo: {},
@@ -387,6 +388,12 @@ addBudgetForm.addEventListener('submit', (e) => {
 
     if (i < 2) {
       data.income[inputName] = input.value;
+      continue;
+    }
+
+    if(i>5)
+    {
+      data.budget[inputName]= input.value;
       continue;
     }
 
