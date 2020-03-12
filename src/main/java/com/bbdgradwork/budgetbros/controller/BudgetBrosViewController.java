@@ -24,12 +24,12 @@ public class BudgetBrosViewController {
 
     //path params
 
-    @RequestMapping(value={"/{userId}"}, method = RequestMethod.GET)
-    public String main(@PathVariable("userId") String userId) {
+    @RequestMapping(value={"/"}, method = RequestMethod.GET)
+    public String main(/*@PathVariable("userId") String userId*/) {
         ModelAndView modelAndView = new ModelAndView();
 //        String url = httpServletRequest.getRequestURL().toString();
-        Optional<User> result = budgetBrosService.getUser(userId);
-        boolean userLoggedIn = budgetBrosService.getUser(userId).get().getActive();
+//        Optional<User> result = budgetBrosService.getUser(userId);
+        boolean userLoggedIn = true;//budgetBrosService.getUser(userId).get().getActive();
 
 //        System.out.println(url);
         if (!userLoggedIn) {
