@@ -72,10 +72,18 @@ public class BudgetBrosService {
     }
 
 
-//    public TotalsPerCategory getTotalBudgetLeft(List<Expense> expenses, Budget budget) {
-//        TotalsPerCategory totalExpensePerCategory = getTotalExpense(expenses);
-//
-//    }
+    public TotalsPerCategory getTotalBudgetLeft(List<Expense> expenses, Budget budget) {
+
+        TotalsPerCategory totalExpensePerCategory = getTotalExpense(expenses);
+        TotalsPerCategory totalBudgetLeftPerCat = new TotalsPerCategory();
+
+        totalBudgetLeftPerCat.setPersonal(Float.parseFloat(budget.getBudgetPersonalAmount()) - totalExpensePerCategory.getPersonal());
+        totalBudgetLeftPerCat.setHousehold(Float.parseFloat(budget.getBudgetHouseholdAmount()) - totalExpensePerCategory.getHousehold());
+        totalBudgetLeftPerCat.setDept(Float.parseFloat(budget.getBudgetDeptAmount()) - totalExpensePerCategory.getDept());
+        totalBudgetLeftPerCat.setOther(Float.parseFloat(budget.getBudgetOtherAmount()) - totalExpensePerCategory.getOther());
+
+        return totalBudgetLeftPerCat;
+    }
 
 
 

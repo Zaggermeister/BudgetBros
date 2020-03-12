@@ -186,12 +186,13 @@ public class BudgetBrosRestController {
     }
 
 
-//    // Get total budget left per category per user
-//    @GetMapping("/totalBudgetLeftPerCategory/{userId}")
-//    public ResponseEntity<TotalsPerCategory> getTotalBudgetLeftPerCategory(@PathVariable("userId") String userId) {
-//        List<Expense> expenses = expenseRepository.findByUserId(userId);
-//        Budget budget = budgetRepository.findByUserId(userId);
-//        TotalsPerCategory totalsPerCategory = budgetBrosService.getTotalBudgetLeft(expenses, budget);
-//    }
+    // Get total budget left per category per user
+    @GetMapping("/totalBudgetLeftPerCategory/{userId}")
+    public ResponseEntity<TotalsPerCategory> getTotalBudgetLeftPerCategory(@PathVariable("userId") String userId) {
+        List<Expense> expenses = expenseRepository.findByUserId(userId);
+        Budget budget = budgetRepository.findByUserId(userId);
+        TotalsPerCategory totalsPerCategory = budgetBrosService.getTotalBudgetLeft(expenses, budget);
+        return ResponseEntity.status(200).body(totalsPerCategory);
+    }
 
 }
