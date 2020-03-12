@@ -12,6 +12,9 @@ public class Expense {
     @Id
     private String expenseId;
 
+    @Field("CreationId")
+    private String creationId;
+
     @Field("UserId")
     private String userId;
 

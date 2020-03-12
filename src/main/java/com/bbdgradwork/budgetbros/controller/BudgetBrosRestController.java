@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,15 +43,24 @@ public class BudgetBrosRestController {
     }
 
     @PostMapping("/expense")
-    public ResponseEntity<TotalsPerCategory> addExpenses(@RequestBody Expense expense) {
+    public ResponseEntity<List<TotalsPerCategory>> addExpenses(@RequestBody Expense expense) {
+        List<TotalsPerCategory> result = new ArrayList<>();
+
 
         if(budgetBrosService.addExpense(expense)) {
             List<Expense> expenses = expenseRepository.findByUserId(expense.getUserId());
             TotalsPerCategory totalsPerCategory = budgetBrosService.getTotalExpense(expenses);
-            return ResponseEntity.status(201).body(totalsPerCategory);
+
+            Budget budget = budgetRepository.findByUserId(expense.getUserId());
+            TotalsPerCategory totalsBudgetLeftCategory = budgetBrosService.getTotalBudgetLeft(expenses, budget);
+
+            result.add(totalsPerCategory);
+            result.add(totalsBudgetLeftCategory);
+
+            return ResponseEntity.status(201).body(result);
         }
         TotalsPerCategory totalsPerCategory = new TotalsPerCategory();
-        return ResponseEntity.status(400).body(totalsPerCategory);
+        return ResponseEntity.status(400).body(result);
     }
 
     @PostMapping("/user")
@@ -126,10 +136,22 @@ public class BudgetBrosRestController {
         return ResponseEntity.status(200).body(userExpenseRepository.findAll());
     }
 
-    @DeleteMapping("/expense/{expenseId}")
-    public ResponseEntity<List<Expense>> deleteExpense(@PathVariable("expenseId") String expenseId) {
-        expenseRepository.deleteById(expenseId);
-        return ResponseEntity.status(200).body(expenseRepository.findAll());
+    @DeleteMapping("/expense/{userId}/{creationId}")
+    public ResponseEntity<List<TotalsPerCategory>> deleteExpense(@PathVariable("userId") String userId, @PathVariable("creationId") String creationId) {
+        List<TotalsPerCategory> result = new ArrayList<>();
+
+        expenseRepository.deleteByUserIdAndCreationId(userId, creationId);
+
+        List<Expense> expenses = expenseRepository.findByUserId(userId);
+        TotalsPerCategory totalsPerCategory = budgetBrosService.getTotalExpense(expenses);
+
+        Budget budget = budgetRepository.findByUserId(userId);
+        TotalsPerCategory totalsBudgetLeftCategory = budgetBrosService.getTotalBudgetLeft(expenses, budget);
+
+        result.add(totalsPerCategory);
+        result.add(totalsBudgetLeftCategory);
+
+        return ResponseEntity.status(200).body(result);
     }
 
 
