@@ -72,6 +72,11 @@ public class BudgetBrosRestController {
         return ResponseEntity.status(200).body("Success");
     }
 
+//    @GetMapping("/login/{username}/{password}")
+//    public ResponseEntity<String>validateUser(@PathVariable("username") String username, @PathVariable("password") String password) {
+//        User user = budgetBrosService.getUsername()
+//    }
+
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.status(200).body(userRepository.findAll());
