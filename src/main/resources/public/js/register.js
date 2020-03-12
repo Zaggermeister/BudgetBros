@@ -12,9 +12,10 @@ $(()=>{
         method: "POST",
         url: endpoint,
         contentType: 'application/json',
-        data: JSON.stringify({ name: username, surname: surname, email: email })
+        data: JSON.stringify({ name: username, surname: surname, email: email, password: password })
     }).done(function ( msg )  {
         alert( "You have been registered!");
+        window.location = window.location.protocol + '//' + window.location.hostname + (window.location.port ? `:${window.location.port}`: '') + '/signin';
     });
         console.log(createUserObj(username,surname,email,password));
 

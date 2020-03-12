@@ -1,10 +1,27 @@
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+      window.location = window.location.protocol + '//' + window.location.hostname + (window.location.port ? `:${window.location.port}`: '') + '/signin';
+  return "";
+}
+
+let loggedInUserId = getCookie("budgetBro");
+
 const state = {
   addBudgetData: {},
   userInfo: {},
   expenses: [],
 };
-
-const bitzerId = '5e640c960eed1722ac81f561';
 
 // Constants
 
@@ -75,7 +92,7 @@ function setPageToShow(pageToShow) {
 
 function getExpenses() {
 
-  fetch(`http://localhost:8080/api/v1/expenses/${bitzerId}`, {
+  fetch(`http://localhost:8080/api/v1/expenses/${loggedInUserId}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json'
@@ -99,7 +116,7 @@ function getExpenses() {
 
 function getExpensesPerCategory() {
 
-  fetch(`http://localhost:8080/api/v1/totalExpensesPerCategory/${bitzerId}`, {
+  fetch(`http://localhost:8080/api/v1/totalExpensesPerCategory/${loggedInUserId}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -114,7 +131,7 @@ function getExpensesPerCategory() {
 
 function getUserBudget() {
 
-  return fetch(`http://localhost:8080/api/v1/budget/${bitzerId}`, {
+  return fetch(`http://localhost:8080/api/v1/budget/${loggedInUserId}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -163,7 +180,7 @@ function removeExpense(expense, tr) {
 
   return (e) => {
 
-    fetch(`http://localhost:8080/api/v1/expense/${bitzerId}/${expense.creationId}`, {
+    fetch(`http://localhost:8080/api/v1/expense/${loggedInUserId}/${expense.creationId}`, {
       method: 'DELETE',
       headers: {
         'Accept': 'application/json'
@@ -255,6 +272,9 @@ function removeExpenseFromBarChart(chartData) {
 }
 
 // Event listeners
+document.getElementById("btnLogout").addEventListener('click', () => {
+    document.cookie = 'budgetBro=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+})
 
 menuBurger.addEventListener('click', () => {
   sidebar.classList.add('sidebar-show')
@@ -287,7 +307,7 @@ addBudgetForm.addEventListener('submit', (e) => {
   data.budgetIncomeAmount = totalIncome + '';
 
   // TODO: Get real id after successful login.
-  data.userId = bitzerId;
+  data.userId = loggedInUserId;
 
   for (let i = 2; i < inputs.length; i++) {
 
@@ -312,9 +332,12 @@ addBudgetForm.addEventListener('submit', (e) => {
     body: JSON.stringify(data)
   })
   .then((res) => res.text())
-  .then((data) => {
+  .then(() => {
     setPageToShow('page-dashboard');
     sidebarDashboardButton.classList.remove('hidden');
+    getExpenses();
+    getExpensesPerCategory();
+    getBudgetLeftPerCategory();
   })
   .catch((err) => console.warn(err))
 });
@@ -324,7 +347,7 @@ addExpenseForm.addEventListener('submit', (e) => {
   const data = {};
   const inputs = document.getElementsByClassName('add-expense-form-input');
 
-  data.userId = bitzerId;
+  data.userId = loggedInUserId;
 
   data.expenseName = inputs[0].value;
   data.category = inputs[1].value;
@@ -375,7 +398,7 @@ function getBiggestBudget(json) {
 
 function getBudgetLeftPerCategory() {
 
-  fetch(`http://localhost:8080/api/v1/totalBudgetLeftPerCategory/${bitzerId}`, {
+  fetch(`http://localhost:8080/api/v1/totalBudgetLeftPerCategory/${loggedInUserId}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
@@ -390,8 +413,6 @@ function getBudgetLeftPerCategory() {
 
 // Startup logic
 
-// TODO: If user has an income, display dashboard, otherwise display add budget. Remember to hide related buttons.
-
 setPageToShow('page-spinner');
 
 getUserBudget()
@@ -400,14 +421,14 @@ getUserBudget()
   })
   .then((json) => {
 
-    if (!json) {
-
+    if (!!json.budgetId) {
+      setPageToShow('page-dashboard');
+      sidebarAddBudgetButton.classList.add('hidden');
+    }
+    else {
       setPageToShow('page-add-budget');
       sidebarDashboardButton.classList.add('hidden');
     }
-
-    setPageToShow('page-dashboard');
-    sidebarAddBudgetButton.classList.add('hidden');
 
     const biggestBudget = getBiggestBudget(json);
 
@@ -477,8 +498,11 @@ getUserBudget()
       }
     });
 
-    getExpenses();
-    getExpensesPerCategory();
-    getBudgetLeftPerCategory();
+    if (json.budgetId) {
+
+      getExpenses();
+      getExpensesPerCategory();
+      getBudgetLeftPerCategory();
+    }
   })
   .catch((err) => console.warn(err))

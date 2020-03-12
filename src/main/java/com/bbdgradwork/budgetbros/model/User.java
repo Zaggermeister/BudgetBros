@@ -19,6 +19,9 @@ public class User {
     @Field("Name")
     private String name;
 
+    @Field("Active")
+    private boolean active;
+
     @Field("Surname")
     private String surname;
 
@@ -28,4 +31,11 @@ public class User {
     @Field("Income")
     private String income;
 
+    public boolean getActive() {
+        return this.active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

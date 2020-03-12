@@ -82,6 +82,16 @@ public class BudgetBrosRestController {
         return ResponseEntity.status(200).body("Success");
     }
 
+    //TODO: VINEET
+    @GetMapping("/login/{email}/{password}")
+    public ResponseEntity<User>validateUser(@PathVariable("email") String email, @PathVariable("password") String password) {
+        User user = budgetBrosService.validateUser(email, password);
+        if(user == null) {
+            return ResponseEntity.status(404).body(user);
+        }
+        return ResponseEntity.status(200).body(user);
+    }
+
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.status(200).body(userRepository.findAll());
@@ -187,7 +197,15 @@ public class BudgetBrosRestController {
     // Get the budget of a specific user
     @GetMapping("/budget/{userId}")
     public ResponseEntity<Budget> getBudgetByUserId(@PathVariable("userId") String userId) {
-        return ResponseEntity.status(200).body(budgetRepository.findByUserId(userId));
+        Budget budget = new Budget();
+
+        if(budgetRepository.findByUserId(userId) != null)
+        {
+            budget = budgetRepository.findByUserId(userId);
+            return ResponseEntity.status(200).body(budget);
+        } else {
+            return ResponseEntity.status(404).body(budget);
+        }
     }
 
 

@@ -6,7 +6,12 @@ import com.bbdgradwork.budgetbros.model.TotalsPerCategory;
 import com.bbdgradwork.budgetbros.model.User;
 import com.bbdgradwork.budgetbros.repository.ExpenseRepository;
 import com.bbdgradwork.budgetbros.repository.UserRepository;
+import org.apache.catalina.valves.ErrorReportValve;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +26,7 @@ public class BudgetBrosService {
     @Autowired
     ExpenseRepository expenseRepository;
 
+    MongoOperations mongoOperations;
     public BudgetBrosService() {
 
     }
@@ -54,6 +60,28 @@ public class BudgetBrosService {
 
     public Optional<User> getUser(String userId) {
         return userRepository.findById(userId);
+}
+
+    public User validateUser(String email, String password) {
+
+        try {
+            User user = userRepository.findByEmail(email);
+
+            if (password == null || password.equals("") ||user == null) {
+                return null;
+            }
+
+            user.getPassword().equals(password);
+            user.setActive(true);
+            userRepository.save(user);
+            return user;
+        }  catch(Error e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+
+
     }
 
     public TotalsPerCategory getTotalExpense(List<Expense> expenses) {
