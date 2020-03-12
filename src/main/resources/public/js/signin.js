@@ -12,6 +12,8 @@ $(()=>{
         contentType: 'application/json',
     })
     .done(function ( msg )  {
+        document.cookie = 'budgetBro=' + msg.userId;
+
         alert( "You have been logged in!");
         console.log(msg);
         window.location = window.location.protocol + '//' + window.location.hostname + (window.location.port ? `:${window.location.port}`: '') + "/" + msg.userId

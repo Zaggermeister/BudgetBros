@@ -1,3 +1,22 @@
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+      window.location = window.location.protocol + '//' + window.location.hostname + (window.location.port ? `:${window.location.port}`: '') + '/signin';
+  return "";
+}
+
+let userId = getCookie("budgetBro");
+
 const state = {
   addBudgetData: {
     income: {},
@@ -9,7 +28,7 @@ const state = {
 };
 
 // Mocks
-
+console.log('COOKIE',document.cookie);
 const userInfoMock = {
   id: 0,
   name: 'Bitzer',
@@ -351,6 +370,9 @@ function getUserBudgetedIncomeLeft(user) {
 }
 
 // Event listeners
+document.getElementById("btnLogout").addEventListener('click', () => {
+    document.cookie = 'budgetBro=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+})
 
 menuBurger.addEventListener('click', () => {
   sidebar.classList.add('sidebar-show')
