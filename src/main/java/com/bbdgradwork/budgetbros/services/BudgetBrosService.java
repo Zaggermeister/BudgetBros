@@ -50,7 +50,6 @@ public class BudgetBrosService {
         return userRepository.findById(userId);
 }
 
-//TODO: VINEET
     public User validateUser(String email, String password) {
 
         User user = userRepository.findByEmail(email);

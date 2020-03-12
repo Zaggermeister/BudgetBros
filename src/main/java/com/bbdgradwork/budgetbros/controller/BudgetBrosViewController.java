@@ -30,6 +30,11 @@ public class BudgetBrosViewController {
 
     //path params
 
+    @RequestMapping(value={"/","/{userId}/signout"}, method = RequestMethod.GET)
+    public String exit(@PathVariable(required = false, name="userId" ) String userId) {
+        return "redirect:/signin";
+    }
+
     @RequestMapping(value={"/","/{userId}"}, method = RequestMethod.GET)
     public String main(@PathVariable(required = false, name="userId" ) String userId) {
         ModelAndView modelAndView = new ModelAndView();
@@ -59,5 +64,10 @@ public class BudgetBrosViewController {
     @GetMapping("/register")
     public String register() {
         return "register";
+    }
+
+    @GetMapping("/signout")
+    public String logout() {
+        return "signin";
     }
 }
