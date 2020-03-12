@@ -42,12 +42,15 @@ public class BudgetBrosRestController {
     }
 
     @PostMapping("/expense")
-    public ResponseEntity<String> addExpenses(@RequestBody Expense expense) {
+    public ResponseEntity<TotalsPerCategory> addExpenses(@RequestBody Expense expense) {
 
         if(budgetBrosService.addExpense(expense)) {
-            return ResponseEntity.status(201).body("Success");
+            List<Expense> expenses = expenseRepository.findByUserId(expense.getUserId());
+            TotalsPerCategory totalsPerCategory = budgetBrosService.getTotalExpense(expenses);
+            return ResponseEntity.status(201).body(totalsPerCategory);
         }
-        return ResponseEntity.status(400).body("Failed");
+        TotalsPerCategory totalsPerCategory = new TotalsPerCategory();
+        return ResponseEntity.status(400).body(totalsPerCategory);
     }
 
     @PostMapping("/user")
@@ -173,13 +176,23 @@ public class BudgetBrosRestController {
     }
 
 
-    // Get
+    // Get total expenses for each category
     @GetMapping("/totalExpensesPerCategory/{userId}")
-    public ResponseEntity<TotalExpensePerCategory> getTotalExpensesPerCategory(@PathVariable("userId") String userId) {
+    public ResponseEntity<TotalsPerCategory> getTotalExpensesPerCategory(@PathVariable("userId") String userId) {
         List<Expense> expenses = expenseRepository.findByUserId(userId);
-        TotalExpensePerCategory totalExpensePerCategory = budgetBrosService.getTotalExpense(expenses);
+        TotalsPerCategory totalExpensePerCategory = budgetBrosService.getTotalExpense(expenses);
 
         return ResponseEntity.status(200).body(totalExpensePerCategory);
+    }
+
+
+    // Get total budget left per category per user
+    @GetMapping("/totalBudgetLeftPerCategory/{userId}")
+    public ResponseEntity<TotalsPerCategory> getTotalBudgetLeftPerCategory(@PathVariable("userId") String userId) {
+        List<Expense> expenses = expenseRepository.findByUserId(userId);
+        Budget budget = budgetRepository.findByUserId(userId);
+        TotalsPerCategory totalsPerCategory = budgetBrosService.getTotalBudgetLeft(expenses, budget);
+        return ResponseEntity.status(200).body(totalsPerCategory);
     }
 
 }

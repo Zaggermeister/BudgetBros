@@ -3,7 +3,7 @@ package com.bbdgradwork.budgetbros.model;
 import lombok.Data;
 
 @Data
-public class TotalExpensePerCategory {
+public class TotalsPerCategory {
     private float personal;
     private float household;
     private float dept;
