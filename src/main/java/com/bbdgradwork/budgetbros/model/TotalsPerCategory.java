@@ -6,6 +6,6 @@ import lombok.Data;
 public class TotalsPerCategory {
     private float personal;
     private float household;
-    private float dept;
+    private float debt;
     private float other;
 }
