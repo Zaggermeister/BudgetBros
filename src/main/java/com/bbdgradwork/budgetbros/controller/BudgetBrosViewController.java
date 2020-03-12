@@ -30,7 +30,7 @@ public class BudgetBrosViewController {
 
     //path params
 
-    @RequestMapping(value={"/","/{userId}/signout"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/{userId}/signout"}, method = RequestMethod.GET)
     public String exit(@PathVariable(required = false, name="userId" ) String userId) {
         return "redirect:/signin";
     }

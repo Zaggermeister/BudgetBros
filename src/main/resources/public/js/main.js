@@ -15,68 +15,19 @@ function getCookie(cname) {
   return "";
 }
 
-let userId = getCookie("budgetBro");
+let loggedInUserId = getCookie("budgetBro");
 
 const state = {
-  addBudgetData: {
-    income: {},
-    expenses: {},
-    goal: undefined,
-  },
+  addBudgetData: {},
   userInfo: {},
   expenses: [],
 };
-
-// Mocks
-console.log('COOKIE',document.cookie);
-const userInfoMock = {
-  id: 0,
-  name: 'Bitzer',
-  surname: 'Quack',
-  email: 'derp@gmail.com',
-  income: '20000',
-  expenses: {
-    personal: '1200',
-    household: '2500',
-    debt: '10000',
-    other: '500'
-  },
-  goal: '50/30/20'
-}
-
-const expensesMock = [
-  {
-    id: 0,
-    name: 'Chicken',
-    type: 'Personal',
-    value: '100'
-  },
-  {
-    id: 1,
-    name: 'Shoes',
-    type: 'Personal',
-    value: '500'
-  },
-  {
-    id: 2,
-    name: 'Electricity',
-    type: 'Household',
-    value: '1000'
-  },
-  {
-    id: 3,
-    name: 'Mortgage',
-    type: 'Debt',
-    value: '5000'
-  },
-];
 
 // Constants
 
 const pageIds = [
   'page-spinner',
   'page-add-budget',
-  // 'page-add-expenses',
   'page-dashboard',
 ];
 
@@ -113,73 +64,14 @@ const expenseTable = document.getElementById('expense-table');
 
 // Charts
 
+let pieChart = null;
+let barChart = null;
+
 const chart1 = document.getElementById('chart-1').getContext('2d');
 const chart2 = document.getElementById('chart-2').getContext('2d');
 
 Chart.defaults.global.defaultFontFamily = 'Roboto';
 Chart.defaults.global.defaultFontColor = 'rgb(135, 138, 143)';
-
-// TODO: Will need to move this down after startup logic.
-let pieChart = new Chart(chart1, {
-  type: 'pie',
-  data: {
-    datasets: [
-      {
-        data: getUserExpenses(userInfoMock),
-        backgroundColor: [
-          '#FE7191',
-          '#4AC0C0',
-          '#4D72DE',
-          '#FFCE56'
-        ],
-      },
-    ],
-    labels: [
-      'Personal',
-      'Household',
-      'Debt',
-      'Other'
-    ]
-  },
-  options: {
-    responsive: true,
-    legend: {
-      display: true,
-      position: 'left',
-      labels: {
-        fontColor: 'rgb(135, 138, 143)'
-      }
-    }
-  }
-});
-
-let barChart = new Chart(chart2, {
-  type: 'horizontalBar',
-  data: {
-    labels: ['Income'],
-    datasets: [{
-      data: getUserBudgetedIncomeLeft(userInfoMock),
-      backgroundColor: '#4D72DE'
-    }]
-  },
-  options: {
-    legend: {
-      display: false,
-      labels: {
-        fontColor: 'rgb(135, 138, 143)'
-      }
-    },
-    scaleShowLabels: false,
-    scales: {
-      xAxes: [{
-        ticks: {
-          suggestedMin: 0,
-          suggestedMax: getUserBudgetedIncome(userInfoMock)
-        }
-      }]
-    }
-  }
-});
 
 // Functions
 
@@ -200,9 +92,51 @@ function setPageToShow(pageToShow) {
 
 function getExpenses() {
 
-  return new Promise((res, rej) => {
-    setTimeout(() => res(expensesMock), 3000);
-  });
+  fetch(`http://localhost:8080/api/v1/expenses/${loggedInUserId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json'
+    },
+  })
+  .then((res) => res.json())
+  .then((json) => {
+
+    if (!json.length) {
+      return;
+    }
+  
+    expenseTableHeading.innerHTML = 'Expenses';
+    expenseTable.classList.remove('hidden');
+  
+    json.forEach((expense) => {
+      addExpense(expense, expenseTableBody);
+    });
+  })
+}
+
+function getExpensesPerCategory() {
+
+  fetch(`http://localhost:8080/api/v1/totalExpensesPerCategory/${loggedInUserId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+    }
+  })
+  .then((res) => res.json())
+  .then((json) => {
+    addExpenseToPieChart(json);
+  })
+  .catch((err) => console.warn(err))
+}
+
+function getUserBudget() {
+
+  return fetch(`http://localhost:8080/api/v1/budget/${loggedInUserId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+    }
+  })
 }
 
 function addExpense(expense, tableBody) {
@@ -218,9 +152,9 @@ function addExpense(expense, tableBody) {
   tds[2].setAttribute('data-label', 'Value');
   tds[3].setAttribute('data-label', 'Delete');
 
-  const textNode1 = document.createTextNode(expense.name);
-  const textNode2 = document.createTextNode(expense.type);
-  const textNode3 = document.createTextNode(expense.value);
+  const textNode1 = document.createTextNode(expense.expenseName);
+  const textNode2 = document.createTextNode(expense.category);
+  const textNode3 = document.createTextNode(expense.amount);
 
   tds[0].appendChild(textNode1);
   tds[1].appendChild(textNode2);
@@ -246,127 +180,95 @@ function removeExpense(expense, tr) {
 
   return (e) => {
 
-    // TODO: Make request to delete from db using expense.id.
+    fetch(`http://localhost:8080/api/v1/expense/${loggedInUserId}/${expense.creationId}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then((res) => res.json())
+    .then((json) => {
 
-    state.expenses = state.expenses.filter((item) => item.id !== expense.id);
+      state.expenses = state.expenses.filter((item) => item.creationId !== expense.creationId);
 
-    // TODO: Update chartJS here.
+      if (tr.parentNode.children.length - 1 === 0) {
+        expenseTableHeading.innerHTML = 'No detailed expenses';
+        expenseTable.classList.add('hidden');
+      }
+  
+      removeExpenseFromPieChart(json[0]);
+      removeExpenseFromBarChart(json[1]);
+      tr.parentNode.removeChild(tr);
+    })
+    .catch((err) => console.warn(err))
+  }
+}
 
-    if (tr.parentNode.children.length - 1 === 0) {
-      expenseTableHeading.innerHTML = 'No detailed expenses';
-      expenseTable.classList.add('hidden');
+function getHighestCreationId(expenses) {
+  let creationId = -1;
+  expenses.forEach((expense) => {
+    let creationNumId = expense.creationId - 0;
+    if (creationNumId > creationId) {
+      creationId = creationNumId;
     }
-
-    removeExpenseFromPieChart(expense);
-    removeExpenseFromBarChart(expense);
-    tr.parentNode.removeChild(tr);
-  }
+  });
+  return creationId;
 }
 
-function getHighestExpenseId(expenses) {
-  let highestId = -1;
-  expenses.forEach((expense, i) => expense.id > highestId && (highestId = expense.id));
-  return highestId;
-}
+function addExpenseToPieChart(chartData) {
 
-// userInfoMock.expenses.personal,
-// userInfoMock.expenses.household,
-// userInfoMock.expenses.debt,
-// userInfoMock.expenses.other
+  let pieChartData = chartData;
 
-function addExpenseToPieChart(expense) {
+  const charDataArr = [];
 
-  const expenseType = expense.type.toLowerCase();
-  const newData = pieChart.data.datasets[0].data.slice();
-
-  switch (expenseType) {
-    case "personal":
-      newData[0] = (newData[0] - 0) + (expense.value - 0) + '';
-      break;
-    case "household":
-      newData[1] = (newData[1] - 0) + (expense.value - 0) + '';
-      break;
-    case "debt":
-      newData[2] = (newData[2] - 0) + (expense.value - 0) + '';
-      break;
-    case "other":
-      newData[3] = (newData[3] - 0) + (expense.value - 0) + '';
-      break;
-    default:
-      break;
+  for (const key in pieChartData) {
+    charDataArr.push(pieChartData[key])
   }
 
-  pieChart.data.datasets[0].data = newData;
+  pieChart.data.datasets[0].data = charDataArr;
   pieChart.update();
 }
 
-function removeExpenseFromPieChart(expense) {
+function removeExpenseFromPieChart(chartData) {
 
-  const expenseType = expense.type.toLowerCase();
-  const newData = pieChart.data.datasets[0].data.slice();
+  let pieChartData = chartData;
 
-  switch (expenseType) {
-    case "personal":
-      newData[0] = (newData[0] - 0) - (expense.value - 0) + '';
-      break;
-    case "household":
-      newData[1] = (newData[1] - 0) - (expense.value - 0) + '';
-      break;
-    case "debt":
-      newData[2] = (newData[2] - 0) - (expense.value - 0) + '';
-      break;
-    case "other":
-      newData[3] = (newData[3] - 0) - (expense.value - 0) + '';
-      break;
-    default:
-      break;
+  const charDataArr = [];
+
+  for (const key in pieChartData) {
+    charDataArr.push(pieChartData[key])
   }
 
-  pieChart.data.datasets[0].data = newData;
+  pieChart.data.datasets[0].data = charDataArr;
   pieChart.update();
 }
 
-function addExpenseToBarChart(expense) {
+function addExpenseToBarChart(chartData) {
 
-  const newData = barChart.data.datasets[0].data.slice();
-  newData[0] -= expense.value;
+  let barChartData = chartData;
 
-  barChart.data.datasets[0].data = newData;
-  barChart.update();
-}
+  const charDataArr = [];
 
-function removeExpenseFromBarChart(expense) {
-
-  const newData = barChart.data.datasets[0].data.slice();
-  newData[0] = (newData[0] - 0) + (expense.value - 0);
-
-  barChart.data.datasets[0].data = newData;
-  barChart.update();
-}
-
-function getUserExpenses(user) {
-
-  const userExpenses = [];
-
-  for (const key in user.expenses) {
-    userExpenses.push(user.expenses[key])
+  for (const key in barChartData) {
+    charDataArr.push(barChartData[key])
   }
 
-  return userExpenses;
+  barChart.data.datasets[0].data = charDataArr;
+  barChart.update();
 }
 
-function getUserBudgetedIncome(user) {
-  
-  // Goal ex. 50/30/20 (Expenses, Wants, Savings)
-  
-  const expensesPercentage = user.goal.split('/')[0] / 100;
-  return user.income * expensesPercentage;
-}
+function removeExpenseFromBarChart(chartData) {
 
-function getUserBudgetedIncomeLeft(user) {
-  
-  const totalExpenses = getUserExpenses(user).reduce((total, val) => (total - 0) + (val - 0));
-  return [getUserBudgetedIncome(user) - totalExpenses];
+  let barChartData = chartData;
+
+  const charDataArr = [];
+
+  for (const key in barChartData) {
+    charDataArr.push(barChartData[key])
+  }
+
+  barChart.data.datasets[0].data = charDataArr;
+  barChart.update();
 }
 
 // Event listeners
@@ -392,37 +294,52 @@ sidebarAddBudgetButton.addEventListener('click', () => {
   sidebar.classList.remove('sidebar-show');
 });
 
-// sidebarAddExpensesButton.addEventListener('click', () => {
-//   setPageToShow('page-add-expenses');
-//   sidebar.classList.remove('sidebar-show');
-// });
-
 addBudgetForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const data = state.addBudgetData;
   const inputs = document.getElementsByClassName('add-budget-form-input');
 
-  for (let i = 0; i < inputs.length; i++) {
+  const salarayIncome = inputs[0].value;
+  const otherIncome = inputs[1].value;
+
+  const totalIncome = parseFloat(salarayIncome) + parseFloat(otherIncome);
+  
+  data.budgetIncomeAmount = totalIncome + '';
+
+  // TODO: Get real id after successful login.
+  data.userId = loggedInUserId;
+
+  for (let i = 2; i < inputs.length; i++) {
 
     const input = inputs[i];
     const inputName = input.id.split('-')[3];
 
-    if (i < 2) {
-      data.income[inputName] = input.value;
-      continue;
-    }
-
-    data.expenses[inputName] = input.value;
+    data[inputName] = input.value;
   }
 
   const radioInputs = document.getElementsByClassName('add-budget-form-input-radio');
 
   for (let i = 0; i < radioInputs.length; i++) {
-    radioInputs[i].checked && (data.goal = goals[i]);
+    radioInputs[i].checked && (data.savingsGoal = goals[i]);
   }
 
-  // TODO: Send data here.
-  console.log(state.addBudgetData);
+  fetch('http://localhost:8080/api/v1/budget', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then((res) => res.text())
+  .then(() => {
+    setPageToShow('page-dashboard');
+    sidebarDashboardButton.classList.remove('hidden');
+    getExpenses();
+    getExpensesPerCategory();
+    getBudgetLeftPerCategory();
+  })
+  .catch((err) => console.warn(err))
 });
 
 addExpenseForm.addEventListener('submit', (e) => {
@@ -430,42 +347,162 @@ addExpenseForm.addEventListener('submit', (e) => {
   const data = {};
   const inputs = document.getElementsByClassName('add-expense-form-input');
 
-  for (let i = 0; i < inputs.length; i++) {
+  data.userId = loggedInUserId;
 
-    const input = inputs[i];
-    const inputName = input.id.split('-')[2];
+  data.expenseName = inputs[0].value;
+  data.category = inputs[1].value;
+  data.amount = inputs[2].value;
 
-    data[inputName] = input.value;
+  data.creationId = getHighestCreationId(state.expenses) + 1;
+
+  fetch('http://localhost:8080/api/v1/expense', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then((res) => res.json())
+  .then((json) => {
+    addExpenseToPieChart(json[0]);
+    addExpenseToBarChart(json[1]);
+  })
+  .catch((err) => console.warn(err))
+
+  data.name = inputs[0].value;
+  data.type = inputs[1].value;
+  data.value = inputs[2].value;
+
+  addExpense(data, expenseTableBody);
+});
+
+function getBiggestBudget(json) {
+
+  let biggestBudget = json.budgetPersonalAmount - 0;
+
+  if (json.budgetHouseholdAmount - 0 > biggestBudget) {
+    biggestBudget = json.budgetHouseholdAmount - 0
   }
 
-  data.id = getHighestExpenseId(state.expenses) + 1;
+  if (json.budgetDeptAmount - 0 > biggestBudget) {
+    biggestBudget = json.budgetDeptAmount - 0
+  }
 
-  // TODO: Send data here.
-  console.log(data);
+  if (json.budgetOtherAmount - 0 > biggestBudget) {
+    biggestBudget = json.budgetOtherAmount - 0
+  }
 
-  // TODO: Don't call addExpense here, push to an array, when you switch to the dashboard (onclick), then call it on the array.
-  addExpense(data, expenseTableBody);
-  addExpenseToPieChart(data);
-  addExpenseToBarChart(data);
-});
+  return biggestBudget;
+}
+
+function getBudgetLeftPerCategory() {
+
+  fetch(`http://localhost:8080/api/v1/totalBudgetLeftPerCategory/${loggedInUserId}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+    }
+  })
+  .then((res) => res.json())
+  .then((json) => {
+    addExpenseToBarChart(json);
+  })
+  .catch((err) => console.warn(err))
+}
 
 // Startup logic
 
-// TODO: If user has an income, display dashboard, otherwise display add budget. Remember to hide related buttons.
-
 setPageToShow('page-spinner');
-getExpenses().then((expenses) => {
 
-  setPageToShow('page-add-budget');
+getUserBudget()
+  .then((res) => {
+    return res.json()
+  })
+  .then((json) => {
 
-  if (!expenses.length) {
-    return;
-  }
+    if (!!json.budgetId) {
+      setPageToShow('page-dashboard');
+      sidebarAddBudgetButton.classList.add('hidden');
+    }
+    else {
+      setPageToShow('page-add-budget');
+      sidebarDashboardButton.classList.add('hidden');
+    }
 
-  expenseTableHeading.innerHTML = 'Expenses';
-  expenseTable.classList.remove('hidden');
+    const biggestBudget = getBiggestBudget(json);
 
-  expenses.forEach((expense, i) => {
-    addExpense(expense, expenseTableBody);
-  });
-});
+    pieChart = new Chart(chart1, {
+      type: 'pie',
+      data: {
+        datasets: [
+          {
+            data: [0, 0, 0, 0],
+            backgroundColor: [
+              '#FE7191',
+              '#4AC0C0',
+              '#4D72DE',
+              '#FFCE56'
+            ],
+          },
+        ],
+        labels: [
+          'Personal',
+          'Household',
+          'Debt',
+          'Other'
+        ]
+      },
+      options: {
+        responsive: true,
+        legend: {
+          display: true,
+          position: 'left',
+          labels: {
+            fontColor: 'rgb(135, 138, 143)'
+          }
+        }
+      }
+    });
+    
+    barChart = new Chart(chart2, {
+      type: 'horizontalBar',
+      data: {
+        labels: ['Personal', 'Household', 'Debt', 'Other'],
+        datasets: [{
+          data: [0, 0, 0, 0],
+          backgroundColor: [
+            '#FE7191',
+            '#4AC0C0',
+            '#4D72DE',
+            '#FFCE56'
+          ],
+        }]
+      },
+      options: {
+        legend: {
+          display: false,
+          labels: {
+            fontColor: 'rgb(135, 138, 143)'
+          }
+        },
+        scaleShowLabels: false,
+        scales: {
+          xAxes: [{
+            ticks: {
+              suggestedMin: 0,
+              suggestedMax: biggestBudget
+            }
+          }]
+        }
+      }
+    });
+
+    if (json.budgetId) {
+
+      getExpenses();
+      getExpensesPerCategory();
+      getBudgetLeftPerCategory();
+    }
+  })
+  .catch((err) => console.warn(err))
