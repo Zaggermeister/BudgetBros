@@ -63,8 +63,8 @@ public class BudgetBrosService {
                 totalExpensePerCategory.setHousehold(totalExpensePerCategory.getHousehold() + Float.parseFloat(expenses.get(i).getAmount()));
             if(expenses.get(i).getCategory().equals("Personal"))
                 totalExpensePerCategory.setPersonal(totalExpensePerCategory.getPersonal() + Float.parseFloat(expenses.get(i).getAmount()));
-            if(expenses.get(i).getCategory().equals("Dept"))
-                totalExpensePerCategory.setDept(totalExpensePerCategory.getDept() + Float.parseFloat(expenses.get(i).getAmount()));
+            if(expenses.get(i).getCategory().equals("Debt"))
+                totalExpensePerCategory.setDebt(totalExpensePerCategory.getDebt() + Float.parseFloat(expenses.get(i).getAmount()));
             if(expenses.get(i).getCategory().equals("Other"))
                 totalExpensePerCategory.setOther(totalExpensePerCategory.getOther() + Float.parseFloat(expenses.get(i).getAmount()));
         }
@@ -79,7 +79,7 @@ public class BudgetBrosService {
 
         totalBudgetLeftPerCat.setPersonal(Float.parseFloat(budget.getBudgetPersonalAmount()) - totalExpensePerCategory.getPersonal());
         totalBudgetLeftPerCat.setHousehold(Float.parseFloat(budget.getBudgetHouseholdAmount()) - totalExpensePerCategory.getHousehold());
-        totalBudgetLeftPerCat.setDept(Float.parseFloat(budget.getBudgetDeptAmount()) - totalExpensePerCategory.getDept());
+        totalBudgetLeftPerCat.setDebt(Float.parseFloat(budget.getBudgetDeptAmount()) - totalExpensePerCategory.getDebt());
         totalBudgetLeftPerCat.setOther(Float.parseFloat(budget.getBudgetOtherAmount()) - totalExpensePerCategory.getOther());
 
         return totalBudgetLeftPerCat;
