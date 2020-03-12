@@ -2,7 +2,7 @@ package com.bbdgradwork.budgetbros.services;
 
 import com.bbdgradwork.budgetbros.model.Budget;
 import com.bbdgradwork.budgetbros.model.Expense;
-import com.bbdgradwork.budgetbros.model.TotalExpensePerCategory;
+import com.bbdgradwork.budgetbros.model.TotalsPerCategory;
 import com.bbdgradwork.budgetbros.model.User;
 import com.bbdgradwork.budgetbros.repository.ExpenseRepository;
 import com.bbdgradwork.budgetbros.repository.UserRepository;
@@ -56,8 +56,8 @@ public class BudgetBrosService {
         return userRepository.findById(userId);
     }
 
-    public TotalExpensePerCategory getTotalExpense(List<Expense> expenses) {
-        TotalExpensePerCategory totalExpensePerCategory = new TotalExpensePerCategory();
+    public TotalsPerCategory getTotalExpense(List<Expense> expenses) {
+        TotalsPerCategory totalExpensePerCategory = new TotalsPerCategory();
         for (int i = 0; i < expenses.size(); i++) {
             if(expenses.get(i).getCategory().equals("Household"))
                 totalExpensePerCategory.setHousehold(totalExpensePerCategory.getHousehold() + Float.parseFloat(expenses.get(i).getAmount()));
@@ -70,6 +70,13 @@ public class BudgetBrosService {
         }
         return totalExpensePerCategory;
     }
+
+
+//    public TotalsPerCategory getTotalBudgetLeft(List<Expense> expenses, Budget budget) {
+//        TotalsPerCategory totalExpensePerCategory = getTotalExpense(expenses);
+//
+//    }
+
 
 
 
