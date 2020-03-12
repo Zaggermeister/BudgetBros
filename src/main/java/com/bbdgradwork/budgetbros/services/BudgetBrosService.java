@@ -50,20 +50,21 @@ public class BudgetBrosService {
         return userRepository.findById(userId);
 }
 
+//TODO: VINEET
+    public User validateUser(String email, String password) {
 
-//    public Optional<User> validateUser(String email, String password) {
-//
-//        MongoOperations mongoOperations;
-//    }
-//
-//        return  userRepository.findByEmail(email);
-//        Query query = new Query();
-//
-//        query.addCriteria(Criteria.where("Email").is(email).and("Password").is(password));
-//
-//        return userRepository.findOne(query, User.class);
+        User user = userRepository.findByEmail(email);
+        System.out.println(user);
+        if(user.getPassword().equals(password)){
+            System.out.println("YEAH");
+            user.setActive(true);
+            userRepository.save(user);
+            return user;
+        }
+        return null;
 
 
+    }
 
 
 }

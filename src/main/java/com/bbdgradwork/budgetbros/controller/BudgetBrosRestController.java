@@ -69,10 +69,15 @@ public class BudgetBrosRestController {
         return ResponseEntity.status(200).body("Success");
     }
 
-//    @GetMapping("/login/{username}/{password}")
-//    public ResponseEntity<String>validateUser(@PathVariable("username") String username, @PathVariable("password") String password) {
-//        User user = budgetBrosService.getUsername()
-//    }
+    //TODO: VINEET
+    @GetMapping("/login/{email}/{password}")
+    public ResponseEntity<User>validateUser(@PathVariable("email") String email, @PathVariable("password") String password) {
+        User user = budgetBrosService.validateUser(email, password);
+        if(user == null) {
+            return ResponseEntity.status(404).body(user);
+        }
+        return ResponseEntity.status(200).body(user);
+    }
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {

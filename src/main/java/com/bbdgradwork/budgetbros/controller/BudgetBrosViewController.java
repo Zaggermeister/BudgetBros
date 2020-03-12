@@ -2,6 +2,7 @@ package com.bbdgradwork.budgetbros.controller;
 
 import com.bbdgradwork.budgetbros.model.User;
 import com.bbdgradwork.budgetbros.services.BudgetBrosService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,11 @@ public class BudgetBrosViewController {
 
     private BudgetBrosService budgetBrosService;
 
+    @Autowired
+    public BudgetBrosViewController(BudgetBrosService budgetBrosService) {
+        this.budgetBrosService = budgetBrosService;
+    }
+
     @GetMapping("/greeting")
     public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
         model.addAttribute("name", name);
@@ -24,17 +30,24 @@ public class BudgetBrosViewController {
 
     //path params
 
-    @RequestMapping(value={"/"}, method = RequestMethod.GET)
-    public String main(/*@PathVariable("userId") String userId*/) {
+    @RequestMapping(value={"/","/{userId}"}, method = RequestMethod.GET)
+    public String main(@PathVariable(required = false, name="userId" ) String userId) {
         ModelAndView modelAndView = new ModelAndView();
 //        String url = httpServletRequest.getRequestURL().toString();
-//        Optional<User> result = budgetBrosService.getUser(userId);
-        boolean userLoggedIn = true;//budgetBrosService.getUser(userId).get().getActive();
 
-//        System.out.println(url);
-        if (!userLoggedIn) {
-            return  "redirect:/signin";
+        System.out.println("userId " + " '" + userId+ "'");
+        if (userId == null) {
+            return "redirect:/signin";
         }
+        Optional<User> result = budgetBrosService.getUser(userId);
+        System.out.println(result);
+
+
+        if (result.equals(Optional.empty())) {
+            return "redirect:/signin";
+        }
+//        boolean userLoggedIn = budgetBrosService.getUser(userId).get().getActive();
+
         return  "main";
     }
 
