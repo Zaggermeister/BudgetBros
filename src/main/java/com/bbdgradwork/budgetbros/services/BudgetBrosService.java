@@ -1,14 +1,12 @@
 package com.bbdgradwork.budgetbros.services;
 
+
 import com.bbdgradwork.budgetbros.model.Expense;
 import com.bbdgradwork.budgetbros.model.User;
 import com.bbdgradwork.budgetbros.repository.ExpenseRepository;
 import com.bbdgradwork.budgetbros.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,9 +22,7 @@ public class BudgetBrosService {
 
     MongoOperations mongoOperations;
     public BudgetBrosService() {
-
     }
-
 
     public boolean addExpense(Expense expense) {
         try {

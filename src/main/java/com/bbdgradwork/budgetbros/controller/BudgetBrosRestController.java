@@ -56,9 +56,7 @@ public class BudgetBrosRestController {
             return ResponseEntity.status(201).body("Success");
         }
         return ResponseEntity.status(400).body("Failed");
-
     }
-
 
     // Edit the password of a user
     @PutMapping("/user/{userId}")
@@ -86,7 +84,6 @@ public class BudgetBrosRestController {
             return ResponseEntity.status(200).body(result);
         else
             return ResponseEntity.status(404).body(result);
-
     }
 
     // Get all the expenses
